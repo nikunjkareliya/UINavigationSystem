@@ -40,16 +40,16 @@ namespace Shared.UINavigationSystem
             switch (fromDirection)
             {
                 case Direction.Up:
-                    startPos = new Vector2(0, -Screen.height);
-                    break;
-                case Direction.Down:
                     startPos = new Vector2(0, Screen.height);
                     break;
+                case Direction.Down:
+                    startPos = new Vector2(0, -Screen.height);
+                    break;
                 case Direction.Right:
-                    startPos = new Vector2(-Screen.width, 0);
+                    startPos = new Vector2(Screen.width, 0);
                     break;
                 case Direction.Left:
-                    startPos = new Vector2(Screen.width, 0);
+                    startPos = new Vector2(-Screen.width, 0);
                     break;
             }
 
@@ -126,7 +126,7 @@ namespace Shared.UINavigationSystem
         {
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                ShowPanel(PanelID.Home, Direction.Left);
+                ShowPanel(PanelID.Home, Direction.Right);
             }
             else if (Input.GetKeyDown(KeyCode.RightArrow))
             {
