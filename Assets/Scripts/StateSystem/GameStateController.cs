@@ -26,12 +26,12 @@ namespace Shared.StateSytem
                 _gameStates.Add(gameState);
             }
 
-            Events<int>.Register(EventKeys.GAME_STATE_CHANGED, ChangeState);
+            Events.Register<int>(EventKeys.GAME_STATE_CHANGED, ChangeState);
         }
 
         private void OnDestroy()
         {
-            Events<int>.Unregister(EventKeys.GAME_STATE_CHANGED, ChangeState);
+            Events.Unregister<int>(EventKeys.GAME_STATE_CHANGED, ChangeState);
         }
 
         private void ChangeState(int newState)
@@ -42,14 +42,14 @@ namespace Shared.StateSytem
                 _previousState = _currentState;
 
                 _currentState?.ExitState();
-                Events<int>.Execute(EventKeys.GAME_STATE_EXITED, _currentState.State);
+                Events.Execute<int>(EventKeys.GAME_STATE_EXITED, _currentState.State);
             }
 
             IGameState gameState = GetGameState(newState);
             _currentState = gameState;
 
             _currentState.EnterState();
-            Events<int>.Execute(EventKeys.GAME_STATE_ENTERED, _currentState.State);
+            Events.Execute<int>(EventKeys.GAME_STATE_ENTERED, _currentState.State);
         }
 
         private IGameState GetGameState(int state)
@@ -68,15 +68,15 @@ namespace Shared.StateSytem
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {                
-                Events<int>.Execute(EventKeys.GAME_STATE_CHANGED, GameState.Home);
+                Events.Execute<int>(EventKeys.GAME_STATE_CHANGED, GameState.Home);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                Events<int>.Execute(EventKeys.GAME_STATE_CHANGED, GameState.LevelSelect);
+                Events.Execute<int>(EventKeys.GAME_STATE_CHANGED, GameState.LevelSelect);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                Events<int>.Execute(EventKeys.GAME_STATE_CHANGED, GameState.Gameplay);
+                Events.Execute<int>(EventKeys.GAME_STATE_CHANGED, GameState.Gameplay);
             }
             else if (Input.GetKeyDown(KeyCode.Space))
             {

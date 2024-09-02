@@ -5,106 +5,90 @@ using UnityEngine;
 namespace Shared.EventSystem
 {
     public static class Events
-    {        
-        private static Dictionary<string, Action> _eventDictionary = new Dictionary<string, Action>();
+    {
+        private static Dictionary<string, Delegate> eventDictionary = new Dictionary<string, Delegate>();
 
         public static void Register(string eventType, Action eventHandler)
         {
-            if (!_eventDictionary.ContainsKey(eventType))
+            if (eventDictionary.TryGetValue(eventType, out Delegate thisEvent))
             {
-                _eventDictionary[eventType] = eventHandler;
+                eventDictionary[eventType] = (Action)thisEvent + eventHandler;
             }
             else
             {
-                _eventDictionary[eventType] += eventHandler;
+                eventDictionary.Add(eventType, eventHandler);
+            }
+        }
+
+        public static void Register<T>(string eventType, Action<T> eventHandler)
+        {
+            if (eventDictionary.TryGetValue(eventType, out Delegate thisEvent))
+            {
+                eventDictionary[eventType] = (Action<T>)thisEvent + eventHandler;
+            }
+            else
+            {
+                eventDictionary.Add(eventType, eventHandler);
+            }
+        }
+
+        public static void Register<T1, T2>(string eventType, Action<T1, T2> eventHandler)
+        {
+            if (eventDictionary.TryGetValue(eventType, out Delegate thisEvent))
+            {
+                eventDictionary[eventType] = (Action<T1, T2>)thisEvent + eventHandler;
+            }
+            else
+            {
+                eventDictionary.Add(eventType, eventHandler);
             }
         }
 
         public static void Unregister(string eventType, Action eventHandler)
         {
-            if (_eventDictionary.ContainsKey(eventType))
+            if (eventDictionary.TryGetValue(eventType, out Delegate thisEvent))
             {
-                _eventDictionary[eventType] -= eventHandler;
+                eventDictionary[eventType] = (Action)thisEvent - eventHandler;
+            }
+        }
+
+        public static void Unregister<T>(string eventType, Action<T> eventHandler)
+        {
+            if (eventDictionary.TryGetValue(eventType, out Delegate thisEvent))
+            {
+                eventDictionary[eventType] = (Action<T>)thisEvent - eventHandler;
+            }
+        }
+
+        public static void Unregister<T1, T2>(string eventType, Action<T1, T2> eventHandler)
+        {
+            if (eventDictionary.TryGetValue(eventType, out Delegate thisEvent))
+            {
+                eventDictionary[eventType] = (Action<T1, T2>)thisEvent - eventHandler;
             }
         }
 
         public static void Execute(string eventType)
         {
-            if (_eventDictionary.ContainsKey(eventType))
+            if (eventDictionary.TryGetValue(eventType, out Delegate thisEvent))
             {
-                _eventDictionary[eventType]?.Invoke();
-            }
-        }
-    }
-
-    public static class Events<T>
-    {
-        private static Dictionary<string, Action<T>> _eventDictionary = new Dictionary<string, Action<T>>();
-
-        public static void Register(string eventType, Action<T> eventHandler)
-        {
-            if (!_eventDictionary.ContainsKey(eventType))
-            {
-                _eventDictionary[eventType] = eventHandler;
-            }
-            else
-            {
-                _eventDictionary[eventType] += eventHandler;
-            }
-
-            //Debug.Log($"_eventDictionary count -> {_eventDictionary.Count}");
-            //foreach (var kvp in _eventDictionary)
-            //{
-            //    Debug.Log($"Key -> {kvp.Key} | Value -> {kvp.Value}");
-            //}
-        }
-
-        public static void Unregister(string eventType, Action<T> eventHandler)
-        {
-            if (_eventDictionary.ContainsKey(eventType))
-            {
-                _eventDictionary[eventType] -= eventHandler;
+                (thisEvent as Action)?.Invoke();
             }
         }
 
-        public static void Execute(string eventType, T eventArgs)
+        public static void Execute<T>(string eventType, T arg)
         {
-            if (_eventDictionary.ContainsKey(eventType))
+            if (eventDictionary.TryGetValue(eventType, out Delegate thisEvent))
             {
-                _eventDictionary[eventType]?.Invoke(eventArgs);
-            }
-        }
-    }
-
-    public static class Events<T1, T2>
-    {
-        private static Dictionary<string, Action<T1, T2>> _eventDictionary = new Dictionary<string, Action<T1, T2>>();
-
-        public static void Register(string eventType, Action<T1, T2> eventHandler)
-        {
-            if (!_eventDictionary.ContainsKey(eventType))
-            {
-                _eventDictionary[eventType] = eventHandler;
-            }
-            else
-            {
-                _eventDictionary[eventType] += eventHandler;
+                (thisEvent as Action<T>)?.Invoke(arg);
             }
         }
 
-        public static void Unregister(string eventType, Action<T1, T2> eventHandler)
+        public static void Execute<T1, T2>(string eventType, T1 arg1, T2 arg2)
         {
-            if (_eventDictionary.ContainsKey(eventType))
+            if (eventDictionary.TryGetValue(eventType, out Delegate thisEvent))
             {
-                _eventDictionary[eventType] -= eventHandler;
-            }
-        }
-
-        public static void Execute(string eventType, T1 eventArgs1, T2 eventArgs2)
-        {
-            if (_eventDictionary.ContainsKey(eventType))
-            {
-                _eventDictionary[eventType]?.Invoke(eventArgs1, eventArgs2);
+                (thisEvent as Action<T1, T2>)?.Invoke(arg1, arg2);
             }
         }
     }

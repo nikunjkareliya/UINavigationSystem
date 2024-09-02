@@ -23,14 +23,14 @@ namespace Shared.UINavigationSystem
 
         private void Awake()
         {
-            Events<PanelID, Direction>.Register(EventKeys.PANEL_SHOW, ShowPanel);
-            Events<PanelID, Direction>.Register(EventKeys.PANEL_HIDE, HidePanel);
+            Events.Register<PanelID, Direction>(EventKeys.PANEL_SHOW, ShowPanel);
+            Events.Register<PanelID, Direction>(EventKeys.PANEL_HIDE, HidePanel);
         }
 
         private void OnDestroy()
         {
-            Events<PanelID, Direction>.Unregister(EventKeys.PANEL_SHOW, ShowPanel);
-            Events<PanelID, Direction>.Unregister(EventKeys.PANEL_HIDE, HidePanel);
+            Events.Unregister<PanelID, Direction>(EventKeys.PANEL_SHOW, ShowPanel);
+            Events.Unregister<PanelID, Direction>(EventKeys.PANEL_HIDE, HidePanel);
         }
 
         private void ShowPanel(PanelID panelID, Direction fromDirection)

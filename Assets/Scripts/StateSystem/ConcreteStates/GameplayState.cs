@@ -19,10 +19,10 @@ namespace Shared.StateSytem
         {
             Debug.Log($"Entered to state: <color=cyan>{GameState.HashToName(State)}</color>");
 
-            Events<PanelID, Direction>.Execute(EventKeys.PANEL_SHOW, PanelID.Gameplay, Direction.Left);
+            Events.Execute<PanelID, Direction>(EventKeys.PANEL_SHOW, PanelID.Gameplay, Direction.Left);
 
-            Events<PanelID, Direction>.Execute(EventKeys.PANEL_HIDE, PanelID.Home, Direction.Left);
-            Events<PanelID, Direction>.Execute(EventKeys.PANEL_HIDE, PanelID.LevelSelect, Direction.Left);
+            Events.Execute<PanelID, Direction>(EventKeys.PANEL_HIDE, PanelID.Home, Direction.Left);
+            Events.Execute<PanelID, Direction>(EventKeys.PANEL_HIDE, PanelID.LevelSelect, Direction.Left);
         }
 
         public void ExitState()
